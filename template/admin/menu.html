@@ -1,0 +1,16 @@
+
+{% macro submenu() %}
+    {% if menu %}
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="top-right links collapse navbar-collapse">
+                <ul class="nav navbar-nav" >
+                {% for link in menu %}
+                <li {%  if request.endpoint == link['endpoint'] %} class="active" {% endif %}>
+                    <a href="{{ url_for(link['endpoint']) }}">{{ link['name'] }}</a>
+                </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </nav>
+    {% endif %}
+{%  endmacro %}

@@ -1,0 +1,42 @@
+.admin-medias-nav {
+    position: relative;
+    visibility: hidden;
+}
+
+.admin-medias-nav .media-nav {
+    text-align: right;
+    top: -3rem;
+    position: absolute;
+}
+
+.admin-medias-nav .media-nav input {
+    position: relative;
+}
+
+.admin-medias-nav .media-nav .actions {
+    width: 3rem;
+    height: 3rem;
+    background-size: auto 100%;
+    background-position: center;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+.admin-medias-nav .media-nav form {
+    display: contents;
+}
+.media {
+    margin-top: 15px !important;
+}
+.media a{
+
+}
+.media a:hover + .admin-medias-nav {
+    visibility: visible;
+}
+.admin-medias-nav:hover {
+    visibility: visible;
+}
+.media a:after + .admin-medias-nav {
+    visibility: visible;
+}

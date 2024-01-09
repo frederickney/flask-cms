@@ -1,0 +1,58 @@
+{% extends "layout/admin.html" %}
+
+{% block title %}
+        Admin
+{% endblock %}
+
+{% block content %}
+    {% for ext in exts %}
+    <div class="col-md-12 row">
+    <div class="col-md-4">
+        <div class="row">{{ ext['name'] }}</div>
+        <div class="row">
+            {% if ext['enabled'] %}
+            <form action="{{ url_for('admin.plugins.disable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+                {{ ext['disable_form'].hidden_tag() }}
+                <div class="card">
+                    <div class="card-footer">
+                        <div class="row text-uppercase text">
+                            {{ ext['disable_form'].submit }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <form action="{{ url_for('admin.plugins.enable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+                {{ ext['enable_form'].hidden_tag() }}
+                <div class="card">
+                    <div class="card-footer">
+                        <div class="row text-uppercase text">
+                            {{ ext['enable_form'].submit }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+            <form action="{{ url_for('admin.plugins.delete') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+                {{ ext['delete_form'].hidden_tag() }}
+                <div class="card">
+                    <div class="card-footer">
+                        <div class="row text-uppercase text">
+                            {{ ext['delete_form'].submit }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div clas="'col-md-8">
+        <div class="row">description</div>
+    </div>
+
+
+    </div>
+    {% endfor %}
+{% endblock %}

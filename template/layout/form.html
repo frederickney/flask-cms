@@ -1,0 +1,41 @@
+{% extends "admin/index.html" %}
+{% import 'admin/menu.html' as admin_submenu with context %}
+
+{%  block body %}
+<div class="flex-center position-ref full-height">
+            {{ admin_submenu.submenu() }}
+            <!--img src="asset('images/background.jpg')" style="width:100%; position:fixed;"-->
+
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-0">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="title m-b-md">
+                                    {% block title %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="container" class="conversation panel panel-default black custom_border col-md-10 col-md-offset-1">
+                                    {% block content %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="links">
+                                    <!--
+                                    <a href="https://laracasts.com">Laracasts</a>
+                                    <a href="https://laravel-news.com">News</a>
+                                    <a href="https://forge.laravel.com">Forge</a>
+                                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+{%  endblock %}
