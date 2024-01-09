@@ -1,9 +1,10 @@
-# coding : utf-8
+# coding: utf-8
+
 
 __author__ = 'Frederick NEY'
 
-import logging
 
+import logging
 
 
 try:

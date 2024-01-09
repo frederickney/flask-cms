@@ -1,3 +1,9 @@
+# coding: utf-8
+
+
+__author__ = 'Frederick NEY'
+
+
 from flask_wtf import FlaskForm, Form
 from wtforms import SubmitField, HiddenField, TextAreaField, StringField, FieldList, BooleanField, FormField
 from wtforms.validators import DataRequired, InputRequired

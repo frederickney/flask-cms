@@ -1,6 +1,8 @@
 # coding: utf-8
 
+
 __author__ = 'Frederick NEY'
+
 
 from flask import render_template as template, jsonify
 from flask import redirect, url_for

@@ -1,3 +1,9 @@
+# coding: utf-8
+
+
+__author__ = 'Frederick NEY'
+
+
 from apscheduler.jobstores.base import ConflictingIdError
 from flask import render_template as template
 from flask import redirect, url_for

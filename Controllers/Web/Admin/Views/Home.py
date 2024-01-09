@@ -1,3 +1,9 @@
+# coding: utf-8
+
+
+__author__ = 'Frederick NEY'
+
+
 from flask_admin import AdminIndexView, expose
 from flask_login import current_user, login_required
 

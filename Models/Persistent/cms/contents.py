@@ -1,6 +1,8 @@
 # coding: utf-8
 
+
 __author__ = 'Frederick NEY'
+
 
 from sqlalchemy import Column, Integer, VARCHAR, ForeignKey, BOOLEAN, BIGINT, TEXT, DateTime
 from sqlalchemy.orm import relationship, backref

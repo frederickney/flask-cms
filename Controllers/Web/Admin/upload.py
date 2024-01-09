@@ -1,3 +1,8 @@
+# coding: utf-8
+
+
+__author__ = 'Frederick NEY'
+
 
 from flask_admin.menu import MenuLink
 
