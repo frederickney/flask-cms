@@ -22,6 +22,8 @@ SERVER_ENV:
     CAPTURE: false
     STATIC_PATH: static
     TEMPLATE_PATH: template
+    # Sessions storage technologie can be : filesystem, memcached, redis, sqlalchemy or mongodb
+    # for sqlalchemy (default database configuration is required) and mongodb (Mongodb definition in database is required)
     SESSION: redis
     THREADS_PER_CORE: 16
     # Mainly used for flask_framework.server and flask_framework.wsgi for logging.  
