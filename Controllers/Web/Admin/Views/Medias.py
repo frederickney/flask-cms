@@ -20,7 +20,7 @@ class Medias(Content):
     @login_required
     @expose('/')
     def index(self):
-        from Models.Persistant.cms import Contents
+        from Models.Persistent.cms import Contents
         from Models.Forms.edit import Form
         medias = Database.get_session_by_name('cms').query(Contents)\
             .filter(Contents.type == self.type)\
@@ -45,7 +45,7 @@ class Medias(Content):
         form = Process()
         form.ext.data = 'medias'
         if form.validate_on_submit():
-            from Models.Persistant.cms import Contents
+            from Models.Persistent.cms import Contents
             file = form.file.data
             date = datetime.now().date()
             directory = os.path.join(Environment.SERVER_DATA['STATIC_PATH'], 'uploads', str(date.year), str(date.month))
@@ -79,7 +79,7 @@ class Medias(Content):
         import os
         from flask import Response
         from Models.Forms.upload import Delete
-        from Models.Persistant.cms import Contents
+        from Models.Persistent.cms import Contents
         form = Delete()
         if form.validate_on_submit():
             content = Database.session.query(Contents).filter(Contents.id == form.content.data).first()

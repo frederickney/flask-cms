@@ -10,7 +10,7 @@ class Pages(BaseView):
     @expose('/')
     @login_required
     def index(self):
-        from Models.Persistant.cms import Contents
+        from Models.Persistent.cms import Contents
         return self.render('admin/setup.html')
 
     @expose('/add/', methods=['GET'])

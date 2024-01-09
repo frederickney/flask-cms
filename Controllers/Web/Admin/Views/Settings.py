@@ -28,6 +28,6 @@ class Settings(BaseView):
     def users(self):
         from Models.Forms.upload import Form
         from flask_framework.Database import Database
-        from Models import Persistant
-        users = Database.session.query(Persistant.cms.Users).all()
+        from Models import Persistent
+        users = Database.session.query(Persistent.cms.Users).all()
         return self.render('admin/upload/index.html', form=Form(), menu=self.submenu, users = users)

@@ -30,7 +30,7 @@ class Content(BaseView):
         print(content.content)
         if content.validate_on_submit():
             from flask_framework.Database import Database
-            from Models.Persistant.cms import Contents
+            from Models.Persistent.cms import Contents
             content = Database.session.query(Contents).filter(Contents.id == content.content.data).first()
             return self.render('admin/edit/{}.html'.format(self.type), form=Content(), content=content)
         return redirect(request.referrer)
@@ -46,7 +46,7 @@ class Content(BaseView):
         print(request.json)
         if form.validate_on_submit():
             from flask_framework.Database import Database
-            from Models.Persistant.cms import Contents
+            from Models.Persistent.cms import Contents
             content = Database.session.query(Contents).filter(Contents.id == form.content.data).first()
             for meta in content.metas:
                 Database.session.delete(meta)

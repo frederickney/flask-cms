@@ -6,7 +6,7 @@ from flask import render_template as template
 from flask import redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 import flask_framework.Server as Server
-from Models import Forms, Persistant
+from Models import Forms, Persistent
 import flask
 from flask_framework.Database import Database
 from Crypto.Hash import SHA512
@@ -37,7 +37,7 @@ class Controller(object):
 
     @classmethod
     def user(cls, id):
-        user = Database. session.query(Persistant.cms.Users).filter(Persistant.cms.Users.id == id).first()
+        user = Database. session.query(Persistent.cms.Users).filter(Persistent.cms.Users.id == id).first()
         user.is_authenticated = True
         return user
 
@@ -52,7 +52,7 @@ class Controller(object):
         logging.debug('form token %s' % form.csrf_token)
         logging.debug('recv token %s' % form.csrf_token.data)
         if form.validate_on_submit():
-            user = Database.session.query(Persistant.cms.Users).filter(Persistant.cms.Users.email == form.email.data).first()
+            user = Database.session.query(Persistent.cms.Users).filter(Persistent.cms.Users.email == form.email.data).first()
             hash = SHA512.new()
             hash.update(bytes(form.password.data, 'utf-8'))
             logging.debug(user)
