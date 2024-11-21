@@ -19,5 +19,3 @@ class Metadata(Database.Model):
     key = Column(VARCHAR(256), primary_key=True, nullable=False)
     value = Column(TEXT, nullable=False)
 
-    def get_id(self):
-        return self.id

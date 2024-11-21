@@ -24,13 +24,6 @@ class Users(Database.Model):
     is_authenticated = False
     is_anonymous = False
 
-    @secured("id")
-    def __init__(self):
-        self.id = property(self.get_id, self.set_id)
 
-    def get_id(self, value):
-        return self._id
-
-    def set_id(self, value):
-        from flask_framework.Exceptions.QueryExceptions import PrimaryKeyChangeException
-        raise PrimaryKeyChangeException("Trying to change read only primary key id of {}[{}] by {}".format(Users.__name__, self._id, value))
+    def get_id(self):
+        return self.id

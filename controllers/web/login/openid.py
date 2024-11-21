@@ -15,7 +15,6 @@ class Controller(object):
 
     @staticmethod
     def index():
-        session.set()
         logging.debug(session.get('oidc_id_token'))
         next = request.args.get('next')
         return flask.redirect(next or request.referrer or flask.url_for('home'))

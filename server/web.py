@@ -24,5 +24,6 @@ class Route(object):
         server.add_url_rule('/access/ad', 'ad-login', Controllers.Web.Login.ADLoginController.login, methods=['GET', 'POST'])
         server.add_url_rule('/access/ad/logout', 'ad-logout', Controllers.Web.Login.ADLoginController.logout, methods=['GET', 'POST'])
         server.add_url_rule('/test', 'test', Controllers.Web.Login.ADLoginController.test, ['GET'])
+        server.add_url_rule('/sso', 'sso', Controllers.Web.Login.SSOLoginController.login_callback, ['GET'])
         return
 

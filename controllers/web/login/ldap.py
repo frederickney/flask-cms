@@ -20,11 +20,10 @@ class Controller(object):
 
     @staticmethod
     def logout():
-        del session['oidc_csrf_token']
-        del session['oidc_id_token']
         return LDAP.logout()
 
     @staticmethod
     @login_required
     def test():
-        return jsonify({'welcome': 'ok'})
+        from flask import session
+        return jsonify({'welcome': 'ok', 'username' : session.get('username')})
