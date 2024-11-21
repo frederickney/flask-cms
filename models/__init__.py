@@ -4,4 +4,4 @@
 __author__ = 'Frederick NEY'
 
 
-from Models.ModelsRegistry import *
+from . import *
