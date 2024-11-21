@@ -4,9 +4,5 @@
 __author__ = 'Frederick NEY'
 
 
-from . import *
+from . import cms
 
-
-__all__ = [
-    'cms'
-]

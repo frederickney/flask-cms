@@ -4,6 +4,6 @@
 __author__ = 'Frederick NEY'
 
 
-from .HomeController import Controller as HomeController
-from . import Login
-from . import Admin
+from .home import Controller as home
+from . import login
+from . import admin

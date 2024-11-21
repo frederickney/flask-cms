@@ -18,12 +18,12 @@
             </a>
             <div class="row admin-medias-nav">
                 <div class="col-md-12 media-nav">
-                    <form action="{{ url_for('admin.medias.edit') }}"  method="get">
+                    <form action="{{ url_for('admin:medias.edit') }}"  method="get">
 
                         {{ forms[loop.index - 1].content }}
                         <input type="submit" value="" alt="" class="actions" style="background-image: url('{{ url_for('static', filename="images/edit.png") }}')">
                     </form>
-                    <form action="{{ url_for('admin.medias.delete') }}" enctype="multipart/form-data" method="post">
+                    <form action="{{ url_for('admin:medias.delete') }}" enctype="multipart/form-data" method="post">
                         <input id='csrf_token' type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
                         {{ forms[loop.index - 1].content }}

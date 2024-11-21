@@ -4,21 +4,11 @@
 __author__ = 'Frederick NEY'
 
 
-from .Home import Home
-from .Settings import Settings
-from .Pages import Pages
-from .Medias import Medias
-from .Plugins import Plugins
-from .Site import Site
-from .Apearance import Appearance
-from .Users import Users
-
-__all__  = [
-    'Home',
-    'Pages',
-    'Medias',
-    'Plugins',
-    'Site',
-    'Appearance',
-    'Users'
-]
+from .home import Home
+from .settings import Settings
+from .pages import Pages
+from .medias import Medias
+from .plugins import Plugins
+from .apearance import Appearance
+from .users import Users
+from .login import Login

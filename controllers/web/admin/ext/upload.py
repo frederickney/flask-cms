@@ -7,15 +7,15 @@ __author__ = 'Frederick NEY'
 from apscheduler.jobstores.base import ConflictingIdError
 from flask import render_template as template
 from flask import redirect, url_for
-from flask_login import login_required
-from Models import Forms
+from flask_framework.Utils.Auth import admin_login_required as login_required
+from models import forms
 import logging
 from flask import request
 import os
 from flask_framework.Config import Environment
 
 
-class UploadController(object):
+class Upload(object):
 
     ext = 'ext'
     file = 'file'
@@ -28,40 +28,40 @@ class UploadController(object):
     @staticmethod
     @login_required
     def index():
-        form = Forms.upload.Form()
+        form = forms.upload.Form()
         return template('admin/upload/index.html', form=form)
 
     @staticmethod
     @login_required
     def upload():
-        form = Forms.upload.Form()
+        form = forms.upload.Form()
         if form.validate_on_submit():
             file = form.file.data
             file.save(os.path.join(Environment.SERVER_DATA['UPLOAD_FILE_DIR'], file.filename))
-            return redirect(url_for('admin#upload#process', type='ext'), code=307)
+            return redirect(url_for('admin:upload.process', type='ext'), code=307)
         return template('admin/upload/success.jinja2')
 
     @staticmethod
     @login_required
     def process():
-        form = Forms.upload.Form()
+        form = forms.upload.Form()
         if form.validate_on_submit():
             if 'type' in request.args:
-                if request.args['type'] in UploadController.types:
-                    if request.args['type'] == UploadController.ext:
-                        UploadController.install_ext(form.file.data.filename)
-                    if request.args['type'] == UploadController.theme:
-                        UploadController.install_theme(form.file.data.filename)
-                    if request.args['type'] == UploadController.file:
-                        UploadController.store_file(form.file.data.filename)
-                    if request.args['type'] == UploadController.doc:
-                        UploadController.store_doc(form.file.data.filename)
-                    if request.args['type'] == UploadController.image:
-                        UploadController.store_image(form.file.data.filename)
-                    if request.args['type'] == UploadController.video:
-                        UploadController.store_video(form.file.data.filename)
-                    return redirect(url_for('admin#upload#success'))
-        return redirect('admin#upload')
+                if request.args['type'] in Upload.types:
+                    if request.args['type'] == Upload.ext:
+                        Upload.install_ext(form.file.data.filename)
+                    if request.args['type'] == Upload.theme:
+                        Upload.install_theme(form.file.data.filename)
+                    if request.args['type'] == Upload.file:
+                        Upload.store_file(form.file.data.filename)
+                    if request.args['type'] == Upload.doc:
+                        Upload.store_doc(form.file.data.filename)
+                    if request.args['type'] == Upload.image:
+                        Upload.store_image(form.file.data.filename)
+                    if request.args['type'] == Upload.video:
+                        Upload.store_video(form.file.data.filename)
+                    return redirect(url_for('admin:upload.success'))
+        return redirect('admin:upload')
 
     @staticmethod
     @login_required

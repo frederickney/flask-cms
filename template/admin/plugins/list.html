@@ -11,7 +11,7 @@
         <div class="row">{{ ext['name'] }}</div>
         <div class="row">
             {% if ext['enabled'] %}
-            <form action="{{ url_for('admin.plugins.disable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+            <form action="{{ url_for('admin:plugins.disable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
                 {{ ext['disable_form'].hidden_tag() }}
                 <div class="card">
                     <div class="card-footer">
@@ -23,7 +23,7 @@
                 </div>
             </form>
             {% else %}
-            <form action="{{ url_for('admin.plugins.enable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+            <form action="{{ url_for('admin:plugins.enable') }}" class="col-md-6" enctype="multipart/form-data" method="post">
                 {{ ext['enable_form'].hidden_tag() }}
                 <div class="card">
                     <div class="card-footer">
@@ -35,7 +35,7 @@
                 </div>
             </form>
             {% endif %}
-            <form action="{{ url_for('admin.plugins.delete') }}" class="col-md-6" enctype="multipart/form-data" method="post">
+            <form action="{{ url_for('admin:plugins.delete') }}" class="col-md-6" enctype="multipart/form-data" method="post">
                 {{ ext['delete_form'].hidden_tag() }}
                 <div class="card">
                     <div class="card-footer">

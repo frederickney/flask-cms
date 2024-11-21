@@ -5,25 +5,25 @@ __author__ = 'Frederick NEY'
 
 
 from flask_admin import BaseView, expose
-from flask_login import login_required
+from flask_framework.Utils.Auth import admin_login_required as login_required
+from models import forms
 
 
 class Pages(BaseView):
 
     def __init__(self):
-        super(Pages, self).__init__(endpoint='admin#pages', url='/admin/pages/')
+        super(Pages, self).__init__(endpoint='admin:pages', url='/admin/pages/')
 
     @expose('/')
     @login_required
     def index(self):
-        from Models.Persistent.cms import Contents
         return self.render('admin/setup.html')
 
     @expose('/add/', methods=['GET'])
     @login_required
     def add(self):
-        from Models.Forms.upload import Content
-        return self.render('admin/upload/index.html', form=Content)
+
+        return self.render('admin/upload/index.html', form=forms.upload.Content())
 
     @expose('/save/', methods=['POST'])
     @login_required

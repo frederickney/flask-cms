@@ -5,7 +5,7 @@ __author__ = 'Frederick NEY'
 
 
 from flask_admin import BaseView, expose
-from flask_login import login_required
+from flask_framework.Utils.Auth import admin_login_required as login_required
 
 
 class Users(BaseView):

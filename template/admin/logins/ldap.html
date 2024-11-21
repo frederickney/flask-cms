@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{{ url_for('ldap.login.send') }}{% if request.args.next %}?next={{ request.args.next }}{% endif %}" method="post">
+    <form action="{{ url_for('admin:login:ldap.login') }}{% if request.args.next %}?next={{ request.args.next }}{% endif %}" method="post">
         {{ form.hidden_tag() }}
         <input type="text" name="csrf_session_token", id="csrf_session_token", value="{{ session.get('csrf_token') }}" hidden="hidden">
         <div class="card">

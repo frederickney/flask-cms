@@ -4,4 +4,4 @@
 __author__ = 'Frederick NEY'
 
 
-from .UploadController import UploadController
+from .upload import Upload

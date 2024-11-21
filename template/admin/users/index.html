@@ -11,32 +11,29 @@
 {% endblock %}
 
 {% block title %}
-        Upload
+        Users
 {% endblock %}
 
 {% block content %}
-    <form action="{{ url_for('admin:{}.add'.format(module)) }}" enctype="multipart/form-data" method="post">
-        {{ form.hidden_tag() }}
-        <input type="text" name="csrf_session_token", id="csrf_session_token", value="{{ session.get('csrf_token') }}" hidden="hidden">
+    {% for user in users %}
         <div class="card">
             <div class="card-body">
                 <br/>
                 <div class="row">
                     <div class="col-md-3 text text-left">
-                        {{ form.file.label }}
+                        {{ user.email }}
                     </div>
                     <div class="col-md-9 text-left">
-                        {{ form.file }}
+                        {{ user.is_admin }}
                     </div>
                 </div>
                 <br/>
             </div>
             <div class="card-footer">
                 <div class="row text-uppercase text">
-                    {{ form.submit }}
                 </div>
                 <br/>
             </div>
         </div>
-    </form>
+    {% endfor %}
 {% endblock %}

@@ -4,4 +4,5 @@
 __author__ = 'Frederick NEY'
 
 
-from . import Web, WS, Socket
+from . import web
+from . import socket

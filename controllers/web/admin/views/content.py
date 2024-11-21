@@ -5,7 +5,9 @@ __author__ = 'Frederick NEY'
 
 
 from flask_admin import BaseView, expose
-from flask_login import login_required
+from flask_framework.Utils.Auth import admin_login_required as login_required
+from models import forms
+from models.persistent import cms
 
 
 class Content(BaseView):
@@ -18,8 +20,7 @@ class Content(BaseView):
     @login_required
     @expose('/add/', methods=['GET'])
     def add(self):
-        from Models.Forms.upload import Process
-        form = Process()
+        form = forms.upload.Process()
         form.ext.data = self.type
         return self.render('admin/upload/index.html', form=form, menu=self.submenu, module=self.type)
 
@@ -27,33 +28,28 @@ class Content(BaseView):
     @expose('/edit/', methods=['GET'])
     def edit(self):
         from flask import redirect, request, flash
-        from Models.Forms.edit import Content
-        from Models.Forms.edit import Form
-        content = Form()
+        content = forms.edit.Form()
         print(request.data)
         print(request.form)
         print(request.json)
         print(content.content)
         if content.validate_on_submit():
             from flask_framework.Database import Database
-            from Models.Persistent.cms import Contents
-            content = Database.session.query(Contents).filter(Contents.id == content.content.data).first()
-            return self.render('admin/edit/{}.html'.format(self.type), form=Content(), content=content)
+            content = Database.session.query(cms.Contents).filter(cms.Contents.id == content.content.data).first()
+            return self.render('admin/edit/{}.html'.format(self.type), form=forms.edit.Content(), content=content)
         return redirect(request.referrer)
 
     @login_required
     @expose('/delete/', methods=['POST'])
     def delete(self):
         from flask import redirect, url_for, request
-        from Models.Forms.upload import Delete
-        form = Delete()
+        form = forms.upload.Delete()
         print(request.data)
         print(request.form)
         print(request.json)
         if form.validate_on_submit():
             from flask_framework.Database import Database
-            from Models.Persistent.cms import Contents
-            content = Database.session.query(Contents).filter(Contents.id == form.content.data).first()
+            content = Database.session.query(cms.Contents).filter(cms.Contents.id == form.content.data).first()
             for meta in content.metas:
                 Database.session.delete(meta)
             Database.session.delete(content)

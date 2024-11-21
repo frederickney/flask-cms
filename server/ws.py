@@ -15,5 +15,5 @@ class Route(object):
         :type server: flask.Flask
         :return: Route object
         """
-        import Controllers
+        import controllers
         return

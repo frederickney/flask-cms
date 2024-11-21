@@ -6,13 +6,13 @@
 
 {% block title %}
     <h3>
-        LDAP Login
+        Default Login
     </h3>
 
 {% endblock %}
 
 {% block content %}
-    <form action="{{ url_for('ldap.login.send') }}{% if request.args.next %}?next={{ request.args.next }}{% endif %}" method="post">
+    <form action="{{ url_for('base.login.send') }}{% if request.args.next %}?next={{ request.args.next }}{% endif %}" method="post">
         {{ form.hidden_tag() }}
         <input type="text" name="csrf_session_token", id="csrf_session_token", value="{{ session.get('csrf_token') }}" hidden="hidden">
         <div class="card">
@@ -20,10 +20,10 @@
                 <br/>
                 <div class="row">
                     <div class="col-md-6 text text-right">
-                        {{ form.username.label }}
+                        {{ form.email.label }}
                     </div>
                     <div class="col-md-6 text-left">
-                        {{ form.username }}
+                        {{ form.email }}
                     </div>
                 </div>
                 <br/>
@@ -44,14 +44,14 @@
                 <br/>
             </div>
         </div>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
     </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+            <div class="flashes bg-{{ category }}">
+              <p class="text-{{ category }}">{{ message }}</p>
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 {% endblock %}

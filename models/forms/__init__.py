@@ -7,9 +7,4 @@ __author__ = 'Frederick NEY'
 from . import login
 from . import upload
 from . import plugins
-
-__all__ = [
-    'login',
-    'upload',
-    'plugins'
-]
+from . import edit

@@ -1,5 +1,8 @@
 # coding: utf-8
+import logging
 
+from flask_login import LoginManager
+from flask_framework.Config import Environment
 
 __author__ = 'Frederick NEY'
 
@@ -16,14 +19,26 @@ class Route(object):
         :type server: flask.Flask
         :return: Route object
         """
-        import Controllers
-        server.add_url_rule('/', "home", Controllers.Web.HomeController.default, methods=["GET"])
-        Controllers.Web.Login.LocalLoginController.setup()
-        server.add_url_rule('/openid/', 'openid', Controllers.Web.Login.OpenIdLoginController.index, methods=['GET', 'POST'])
-        server.add_url_rule('/openid/logout/', 'openidlogout', Controllers.Web.Login.OpenIdLoginController.logout, methods=['GET', 'POST'])
-        server.add_url_rule('/access/ad', 'ad-login', Controllers.Web.Login.ADLoginController.login, methods=['GET', 'POST'])
-        server.add_url_rule('/access/ad/logout', 'ad-logout', Controllers.Web.Login.ADLoginController.logout, methods=['GET', 'POST'])
-        server.add_url_rule('/test', 'test', Controllers.Web.Login.ADLoginController.test, ['GET'])
-        server.add_url_rule('/sso', 'sso', Controllers.Web.Login.SSOLoginController.login_callback, ['GET'])
+        import controllers
+        server.add_url_rule('/', "home", controllers.web.home.default, methods=["GET"])
+        server.add_url_rule('/test', "test", controllers.web.home.test, methods=["GET"])
+        if Environment.Logins:
+            if len(Environment.Logins) > 1:
+                logging.info("{}: Loading loging routes for multi login site")
+                server.add_url_rule('/logout/', "logout", controllers.web.login.Manage.logout, methods=["GET", "POST"])
+                server.add_url_rule('/login/', "login", controllers.web.login.Manage.login, methods=["GET"])
+            if 'BASE' in Environment.Logins:
+                controllers.web.login.local.setup()
+            if 'LDAP' in Environment.Logins:
+                controllers.web.login.ldap.setup()
+            if 'OpenID' in Environment.Logins:
+                controllers.web.login.openid.setup()
+            if 'SAML2' in Environment.Logins:
+                controllers.web.login.saml.setup()
+        if len(Environment.Logins) > 1:
+            logging.info("{}: Loading loging manager for multi login site")
+            controllers.web.login.Manage.setup()
+        controllers.web.admin.setup()
+        #server.add_url_rule('/sso', 'sso', controllers.web.login.sso.login_callback, ['GET'])
         return
 
