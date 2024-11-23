@@ -3,13 +3,10 @@
 
 __author__ = 'Frederick NEY'
 
-
-from flask import g, session, jsonify, request
-import flask
-import logging
 from flask import redirect, url_for
-from flask_login import LoginManager, login_required
+from flask import request
 from flask_framework.Server import Process
+from flask_login import LoginManager, login_required
 
 
 class Controller(object):
@@ -18,17 +15,31 @@ class Controller(object):
     def setup(cls):
         from flask_framework import Server
         import controllers
-        Server.Process._manager = LoginManager()
-        Server.Process._manager.init_app(app=Server.Process.get())
-        Server.Process._manager.unauthorized_handler(cls.redirect_login)
-        Server.Process._manager.user_loader(cls.user_loader)
-        Server.Process.get().add_url_rule('/openid/login/', 'openid.login', controllers.web.login.openid.index, methods=['GET'])
-        Server.Process.get().add_url_rule('/openid/authorize/', 'openid.authorize', controllers.web.login.openid.login, methods=['GET'])
-        Server.Process.get().add_url_rule('/openid/logout/', 'openid.logout', controllers.web.login.openid.logout, methods=['POST'])
+        Server.Process.login_manager(LoginManager()).init_app(app=Server.Process.get()) \
+            if Server.Process.login_manager() is None else Server.Process.login_manager()
+        Server.Process.login_manager().blueprint_login_views.update({
+            None: 'login'
+        })
+        Server.Process.login_manager().user_loader(cls.user_loader)
+        Server.Process.get().add_url_rule(
+            '/openid/login/', 'openid.login', controllers.web.login.openid.index, methods=['GET']
+        )
+        Server.Process.get().add_url_rule(
+            '/openid/authorize/', 'openid.authorize', controllers.web.login.openid.login, methods=['GET']
+        )
+        Server.Process.get().add_url_rule(
+            '/openid/logout/', 'openid.logout', controllers.web.login.openid.logout, methods=['POST']
+        )
         try:
-            Server.Process.get().add_url_rule('/logout/', 'logout', controllers.web.login.openid.logout, methods=['GET'])
-            Server.Process.get().add_url_rule('/login/', 'login', controllers.web.login.openid.index, methods=['GET'])
-            Server.Process.get().add_url_rule('/authorize/', 'authorize', controllers.web.login.openid.login, methods=['POST'])
+            Server.Process.get().add_url_rule(
+                '/logout/', 'logout', controllers.web.login.openid.logout, methods=['GET']
+            )
+            Server.Process.get().add_url_rule(
+                '/login/', 'login', controllers.web.login.openid.index, methods=['GET']
+            )
+            Server.Process.get().add_url_rule(
+                '/authorize/', 'authorize', controllers.web.login.openid.login, methods=['POST']
+            )
         except Exception as e:
             pass
 

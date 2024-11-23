@@ -3,7 +3,6 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_admin import AdminIndexView, expose
 from flask_framework.Utils.Auth import admin_login_required as login_required
 

@@ -3,15 +3,14 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_admin import BaseView, expose
 from flask_framework.Utils.Auth import admin_login_required as login_required
+
 from models import forms
 from models.persistent import cms
 
 
 class Content(BaseView):
-
     type = 'page'
 
     def __init__(self, *args, **kwargs):
@@ -27,12 +26,9 @@ class Content(BaseView):
     @login_required
     @expose('/edit/', methods=['GET'])
     def edit(self):
-        from flask import redirect, request, flash
+        from flask import redirect, request
         content = forms.edit.Form()
-        print(request.data)
-        print(request.form)
-        print(request.json)
-        print(content.content)
+        print(request.args)
         if content.validate_on_submit():
             from flask_framework.Database import Database
             content = Database.session.query(cms.Contents).filter(cms.Contents.id == content.content.data).first()
@@ -42,17 +38,15 @@ class Content(BaseView):
     @login_required
     @expose('/delete/', methods=['POST'])
     def delete(self):
-        from flask import redirect, url_for, request
+        from flask import redirect, url_for
         form = forms.upload.Delete()
-        print(request.data)
-        print(request.form)
-        print(request.json)
         if form.validate_on_submit():
             from flask_framework.Database import Database
             content = Database.session.query(cms.Contents).filter(cms.Contents.id == form.content.data).first()
             for meta in content.metas:
                 Database.session.delete(meta)
             Database.session.delete(content)
+            Database.session.commit()
         return redirect(url_for(self.endpoint + '.index'))
 
     @expose('/save/', methods=['POST'])

@@ -1,12 +1,11 @@
 # coding: utf-8
 
-
 __author__ = 'Frederick NEY'
 
 
 class Route(object):
     """
-    Class that will configure all web services based routes for the server
+    Class that will configure all web based routes for the server
     """
 
     def __init__(self, server):
@@ -16,4 +15,5 @@ class Route(object):
         :type server: flask.Flask
         :return: Route object
         """
-        return
+        import controllers
+        server.register_error_handler(401, controllers.web.errors.unauthorized.handle)

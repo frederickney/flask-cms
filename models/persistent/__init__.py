@@ -3,6 +3,4 @@
 
 __author__ = 'Frederick NEY'
 
-
 from . import cms
-

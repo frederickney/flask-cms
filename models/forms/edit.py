@@ -3,14 +3,12 @@
 
 __author__ = 'Frederick NEY'
 
-
-from flask_wtf import FlaskForm, Form
+from flask_wtf import FlaskForm
 from wtforms import SubmitField, HiddenField, TextAreaField, StringField, FieldList, BooleanField, FormField
 from wtforms.validators import DataRequired, InputRequired
 
 
 class Form(FlaskForm):
-
     content = HiddenField(label='content', validators=[InputRequired()])
     submit = SubmitField(label='submit')
 

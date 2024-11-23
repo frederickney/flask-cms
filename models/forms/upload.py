@@ -3,14 +3,12 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, FileField, StringField, HiddenField, IntegerField, TextAreaField, FieldList, FormField, BooleanField
+from wtforms import SubmitField, FileField, StringField, HiddenField, IntegerField, FieldList, FormField
 from wtforms.validators import DataRequired
 
 
 class Form(FlaskForm):
-
     file = FileField(label='File', validators=[DataRequired()])
     submit = SubmitField(label='submit')
 
@@ -21,7 +19,6 @@ class Delete(FlaskForm):
 
 
 class Add(FlaskForm):
-
     file = FileField(label='File', validators=[DataRequired()])
     submit = SubmitField(label='submit')
 
@@ -32,21 +29,19 @@ class Plugin(FlaskForm):
 
 
 class Process(FlaskForm):
-
     file = FileField(label='file', validators=[DataRequired()])
     ext = HiddenField(label='ext', validators=[DataRequired()])
     submit = SubmitField(label='submit')
 
 
 class Content(FlaskForm):
-
     id = HiddenField(label='id')
     url = StringField(label='url', validators=[DataRequired()])
     name = StringField(label='Content name')
     content = StringField(label='Content')
     type = StringField(label='Content', validators=[DataRequired()])
 
-    def __init__(self, id=None, url=None, name=None, content=None,  type=None):
+    def __init__(self, id=None, url=None, name=None, content=None, type=None):
         super(Content, self).__init__()
         self.id.data = id,
         self.type.data = type
@@ -55,10 +50,7 @@ class Content(FlaskForm):
         self.content.data = content
 
 
-
-
 class Restriction(FlaskForm):
-
     restricted_users = FieldList(label='Users')
     restricted_groups = FieldList(label='Groups')
 
@@ -71,11 +63,9 @@ class Restriction(FlaskForm):
 
 
 class Metadata(FlaskForm):
-
     title = StringField(label='Title')
     value = StringField(label='Value')
 
+
 class Metadatas(FlaskForm):
-
     metas = FormField(Metadata, label='Metadatas')
-

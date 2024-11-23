@@ -3,19 +3,20 @@
 
 __author__ = 'Frederick NEY'
 
-
-from flask_admin import BaseView, expose
-from flask_framework.Utils.Auth import admin_login_required as login_required
-from .content import Content
-from flask_framework.Database import Database
-from flask_framework.Config import Environment
-from models.persistent import cms
-from models import forms
 import logging
+
+from flask_admin import expose
+from flask_framework.Config import Environment
+from flask_framework.Database import Database
+from flask_framework.Server import Process
+from flask_framework.Utils.Auth import admin_login_required as login_required
+
+from models import forms
+from models.persistent import cms
+from .content import Content
 
 
 class Medias(Content):
-
     submenu = [
         {'name': 'List Medias', 'endpoint': 'admin:medias.index'},
         {'name': 'Add', 'endpoint': 'admin:medias.add'},
@@ -24,18 +25,18 @@ class Medias(Content):
     def __init__(self):
         self.type = Medias.__name__.lower()
         super(Medias, self).__init__(endpoint='admin:medias', url='/admin/medias/')
+        Process.login_manager().blueprint_login_views.update({'admin:medias': "admin:login.index"})
 
     @login_required
     @expose('/')
     def index(self):
-        medias = Database.get_session_by_name('cms').query(cms.Contents)\
-            .filter(cms.Contents.type == self.type)\
+        medias = Database.get_session_by_name('cms').query(cms.Contents) \
+            .filter(cms.Contents.type == self.type) \
             .all()
         _forms = list()
         for media in medias:
             form = forms.edit.Form()
             form.content.data = media.id
-            print(form.content)
             _forms.append(form)
         return self.render('admin/medias.html', medias=medias, forms=_forms, menu=self.submenu)
 
@@ -68,9 +69,11 @@ class Medias(Content):
                     url='uploads/{}/{}/{}'.format(date.year, date.month, file.filename)
                 )
             )
+            Database.session.commit()
             if url_for('admin:medias.add') not in request.referrer:
                 return jsonify(
-                    {'file': url_for('static', filename='uploads/{}/{}/{}'.format(date.year, date.month, file.filename))}
+                    {'file': url_for('static',
+                                     filename='uploads/{}/{}/{}'.format(date.year, date.month, file.filename))}
                 )
             else:
                 flash('Upload success')

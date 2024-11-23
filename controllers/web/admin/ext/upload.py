@@ -3,20 +3,20 @@
 
 __author__ = 'Frederick NEY'
 
+import logging
+import os
 
 from apscheduler.jobstores.base import ConflictingIdError
-from flask import render_template as template
 from flask import redirect, url_for
-from flask_framework.Utils.Auth import admin_login_required as login_required
-from models import forms
-import logging
+from flask import render_template as template
 from flask import request
-import os
 from flask_framework.Config import Environment
+from flask_framework.Utils.Auth import admin_login_required as login_required
+
+from models import forms
 
 
 class Upload(object):
-
     ext = 'ext'
     file = 'file'
     video = 'video'

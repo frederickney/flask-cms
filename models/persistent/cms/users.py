@@ -3,22 +3,24 @@
 
 __author__ = 'Frederick NEY'
 
-from base64 import b64encode
-
-from sqlalchemy import Column, Integer, VARCHAR, BOOLEAN
+import json
 import logging
+from base64 import b64encode
+from datetime import datetime
+
+import authlib.jose
+import requests
+import saml2.saml
+from flask import current_app, session
 from flask_framework.Database import Database
-from flask import current_app
+from flask_login import login_user
+from sqlalchemy import Column, Integer, VARCHAR, BOOLEAN
+
 import utils.mapper.openid
 import utils.mapper.saml
-from datetime import datetime
-import saml2.saml
-import authlib.jose
-import json
 
 
 class Users(Database.Model):
-
     __tablename__ = 'users'
     __allow_unmapped__ = True
 
@@ -38,7 +40,6 @@ class Users(Database.Model):
         first = None
         second = None
         last = None
-        logging.info(kwargs)
         try:
             super(Users, self).__init__(**kwargs)
             return
@@ -46,11 +47,10 @@ class Users(Database.Model):
             first = e
             pass
         try:
-            logging.info("{}: openid user loading".format(__class__))
+            logging.info("{}: openid user loading".format(__name__))
             super(Users, self).__init__(**self._load_from_token(**kwargs))
             _user = Database.session.query(Users).filter(Users.email == self.email).first()
             if _user:
-                logging.info(_user.__dict__)
                 _user = Database.session.query(Users).filter(Users.email == self.email).first()
                 self.is_active = _user.is_active
                 if self.is_active:
@@ -63,19 +63,18 @@ class Users(Database.Model):
                 self.is_active = True
                 Database.session.add(self)
                 Database.session.commit()
-            logging.info("{}: openid user load".format(__class__))
+            logging.info("{}: openid user loaded".format(__name__))
             return
         except Exception as e:
             second = e
             pass
         try:
-            logging.info("{}: saml user loading".format(__class__))
+            logging.info("{}: saml user loading".format(__name__))
             super(Users, self).__init__(**self._load_from_assertion(**kwargs))
             if Database.session.query(Users).filter(Users.email == self.email).first():
                 _user = Database.session.query(Users).filter(Users.email == self.email).first()
                 self.is_active = _user.is_active
                 if self.is_active:
-                    logging.info("{}: saml user {}".format(__class__, self.__dict__))
                     _user.is_admin = self.is_admin
                     Database.session.commit()
                 else:
@@ -84,7 +83,7 @@ class Users(Database.Model):
                 self.is_active = True
                 Database.session.add(self)
                 Database.session.commit()
-            logging.info("{}: saml user load".format(__class__))
+            logging.info("{}: saml user loaded".format(__name__))
             return
         except Exception as e:
             last = e
@@ -132,7 +131,8 @@ class Users(Database.Model):
                 userinfo["token"] = token
                 user = Users.map_openid(**userinfo)
                 if not user.is_authenticated:
-                    refresh = oidc_client.post(oidc_client.load_server_metadata()['token_endpoint'], data={
+                    session.pop("_user_id")
+                    refresh = requests.post(oidc_client.load_server_metadata()['token_endpoint'], data={
                         'grant_type': "refresh_token",
                         'refresh_token': token['refresh_token']
                     }, headers={
@@ -144,6 +144,7 @@ class Users(Database.Model):
                     userinfo = oidc_client.parse_id_token(token, nonce="")
                     userinfo["token"] = token
                     user = Users.map_openid(**userinfo)
+                    login_user(user, force=True)
                 registered_user = Database.session.query(Users).filter(Users.email == user.email).first()
                 if registered_user:
                     registered_user.exp = user.exp
@@ -180,14 +181,33 @@ class Users(Database.Model):
 
     @property
     def is_authenticated(self):
-        logging.info(self.__dict__)
         if hasattr(self, "exp"):
             if getattr(self, 'exp'):
+                logging.info("{}: exp '{}', now '{}' -> {} ".format(
+                    __name__,
+                    datetime.fromtimestamp(int(getattr(self, 'exp'))).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+                    datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                    datetime.fromtimestamp(
+                        int(getattr(self, 'exp'))
+                    ).strftime("%Y-%m-%dT%H:%M:%S.%fZ") >= datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+                ))
                 return datetime.fromtimestamp(
                     int(getattr(self, 'exp'))
                 ).strftime("%Y-%m-%dT%H:%M:%S.%fZ") >= datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         if hasattr(self, "assertion"):
             if getattr(self, 'assertion'):
+                logging.info("{}: exp '{}', now '{}' -> {} ".format(
+                    __name__,
+                    datetime.fromisoformat(
+                        saml2.saml.assertion_from_string(getattr(self, 'assertion')).authn_statement[0]
+                        .session_not_on_or_after
+                    ).strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                    datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                    datetime.fromisoformat(
+                        saml2.saml.assertion_from_string(getattr(self, 'assertion')).authn_statement[0]
+                        .session_not_on_or_after
+                    ).strftime('%Y-%m-%dT%H:%M:%S.%fZ') >= datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+                ))
                 return datetime.fromisoformat(
                     saml2.saml.assertion_from_string(getattr(self, 'assertion')).authn_statement[0]
                     .session_not_on_or_after

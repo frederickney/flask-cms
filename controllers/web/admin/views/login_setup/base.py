@@ -1,14 +1,16 @@
 # coding: utf-8
 
 import logging
-from flask_admin import BaseView, expose
-from flask_login import current_user, login_user, logout_user
-from flask import url_for, redirect, request, flash, current_app
-from Crypto.Hash import SHA512
-from models import forms
 
+from Crypto.Hash import SHA512
+from flask import url_for, redirect, request, flash, current_app
+from flask_admin import BaseView, expose
 from flask_framework.Database import Database
+from flask_framework.Server import Process
 from flask_framework.Utils.Auth import admin_login_required as login_required
+from flask_login import current_user, login_user, logout_user
+
+from models import forms
 from models.persistent import cms
 
 
@@ -21,6 +23,7 @@ class Login(BaseView):
         :type manager: flask_login.LoginManager
         """
         super(Login, self).__init__(endpoint='admin:login:base', url='/admin/base/')
+        Process.login_manager().blueprint_login_views.update({'admin:login:base': "admin:login.index"})
 
     @expose('/', methods=['GET'])
     def index(self):
@@ -68,8 +71,8 @@ class Login(BaseView):
     def error(self):
         return redirect(url_for('admin:login.index'))
 
-    @expose('/logout/', methods=['POST', 'GET'])
     @login_required
+    @expose('/logout/', methods=['POST', 'GET'])
     def logout(self):
         logout_user()
         flash('logged out')
@@ -77,14 +80,6 @@ class Login(BaseView):
 
     @staticmethod
     def user(id):
-        logging.info("{}: {}".format(__name__, id))
         from models.persistent import cms
         user = Database.session.query(cms.Users).filter(cms.Users.id == id).first()
         return user
-
-    @staticmethod
-    def redirect_login():
-        if 'admin' in request.url:
-            return redirect(url_for('admin:login.index') + "?next={}".format(request.url))
-        else:
-            return redirect(url_for('login') + "?next={}".format(request.url))

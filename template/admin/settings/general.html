@@ -1,0 +1,99 @@
+{% extends "layout/admin.html" %}
+
+{% block title %}
+        setup
+{% endblock %}
+
+{% block content %}
+    <br/>
+    <div class="container col-md-12 panel panel-default">
+
+    <div class="col-md-12">
+        <div class="row">
+            <form method="post" action="{{ url_for('admin:settings.setting') }}">
+                {{ form.hidden_tag() }}
+                <div class="card">
+                    <br/>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="col-md-6 text text-right">
+                                    {{ form.Name.label }}
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    {{ form.Name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="col-md-6 text text-right">
+                                    {{ form.Value.label }}
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    {{ form.Value }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 text-center">
+                                <div class="row">
+                                    <div class="col-md-6 text-right">
+                                    </div>
+                                    <div class="col-md-6 text-left">
+                                        {{ form.submit }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    {% for setting in settings %}
+    <div class="container col-md-12 panel panel-default">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <form method="post" action="{{ url_for('admin:settings.update') }}">
+                    {{ setting['update'].hidden_tag() }}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-5 text-info text-right">
+                                    {{ setting['update'].Value.label }}
+                                    </div>
+                                    <div class="col-md-5">
+                                    {{ setting['update'].Value }}
+                                    </div>
+                                    <div class="col-md-2">
+                                    {{ setting['update'].submit }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="col-md-2 text-right">
+                <form method="post" action="{{url_for('admin:settings.delete')}}">
+                    {{ setting['delete'].hidden_tag() }}
+                    <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            {{ setting['delete'].submit }}
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+{% endblock %}

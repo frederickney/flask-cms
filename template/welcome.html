@@ -1,0 +1,5 @@
+{% if theme is defined %}
+    {% extends "themes/%s/welcome.html" % theme %}
+{% else %}
+    {% extends "themes/%s/welcome.html" % 'default' %}
+{% endif %}

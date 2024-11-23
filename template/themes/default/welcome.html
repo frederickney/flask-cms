@@ -75,14 +75,16 @@
                 {% if current_user.is_authenticated %}
                   <div class="title m-b-md">
                   Hi {{ current_user.firstname }}!
+                  {% if logout is defined %}
                   <a class="right"
                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                   document.getElementById('logout-form').submit();">
                       logout
-                    </a>
+                  </a>
                   <form id="logout-form" action="{{ url_for('logout') }}" method="POST" style="display: none;">
-                                        {{logout.csrf_token}}
-                    </form>
+                      {{logout.csrf_token}}
+                  </form>
+                  {% endif %}
                   </div>
                 {% endif %}
                 <div class="links">

@@ -1,10 +1,5 @@
-{% extends "themes/default/index.html" %}
-
-{% block content %}
-    <h3>
-        {{ title }}
-    </h3>
-    <p>
-        {{ cause }}
-    </p>
-{% endblock %}
+{% if theme is defined %}
+    {% extends "themes/%s/40x.html" % theme %}
+{% else %}
+    {% extends "themes/%s/40x.html" % 'default' %}
+{% endif %}

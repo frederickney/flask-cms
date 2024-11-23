@@ -1,0 +1,24 @@
+{% extends "layout/admin.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <form method="post" action="{{url_for('admin:appearance.panel')}}">
+                {{ selector.hidden_tag() }}
+            <div class="card">
+                <div class="card-body">
+    {{ selector.theme.label }}
+    {{ selector.theme }}
+
+                </div>
+                <div class="card-footer">
+    {{ selector.submit }}
+
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

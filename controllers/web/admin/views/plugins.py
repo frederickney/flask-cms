@@ -3,17 +3,16 @@
 
 __author__ = 'Frederick NEY'
 
-
-from flask_admin import  expose
-from flask_framework.Utils.Auth import admin_login_required as login_required
 import flask
-from .content import Content
+from flask_admin import expose
+from flask_framework.Server import Process
+from flask_framework.Utils.Auth import admin_login_required as login_required
+
 from models import forms
+from .content import Content
 
 
 class Plugins(Content):
-
-
     submenu = [
         {'name': 'List Plugins', 'endpoint': 'admin:plugins.index'},
         {'name': 'Upload', 'endpoint': 'admin:plugins.add'},
@@ -22,6 +21,7 @@ class Plugins(Content):
     def __init__(self):
         self.type = Plugins.__name__.lower()
         super(Plugins, self).__init__(endpoint='admin:plugins', url='/admin/plugins/')
+        Process.login_manager().blueprint_login_views.update({'admin:plugins': "admin:login.index"})
 
     @expose('/', methods=['GET'])
     @login_required

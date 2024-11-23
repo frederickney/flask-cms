@@ -5,48 +5,63 @@ __author__ = 'Frederick NEY'
 
 import logging
 
+from flask import url_for, redirect, current_app
 from flask_admin import BaseView, expose
+from flask_framework import Server
 from flask_framework.Config import Environment
 from flask_framework.Database import Database
-from flask_login import current_user, logout_user
-from flask_framework import Server
-from flask import request, url_for, redirect, current_app
+from flask_framework.Server import Process
 from flask_framework.Utils.Auth import admin_login_required as login_required
+from flask_login import current_user, logout_user
 from flask_login_oidc import get_client
 
-from . import ldap, base
+from . import base
+from . import ldap
+from . import openid
+from . import saml
 
 
 class Login(BaseView):
+    _enabled_logins = []
 
-    def __init__(self, manager=None, admin=None):
+    def __init__(self, admin=None):
         """
 
         :param manager:
         :type manager: flask_login.LoginManager
         """
         super(Login, self).__init__(endpoint='admin:login', url='/admin/login/')
-        manager.init_app(app=Server.Process.get())
-        manager.user_loader(self.user)
-        manager.unauthorized_handler(self.redirect_login)
-        manager.blueprint_login_views = {
-            'login': "login",
-            'admin': "admin:login.index",
-        }
-        if current_app.config.get('FLASK_CMS_BASE_ADMIN_LOGIN_TEMPLATE', current_app.get('BASE_LOGIN_TEMPLATE', None)):
+        Process.login_manager().blueprint_login_views.update({'admin:login': "admin:login.index"})
+
+        if (Server.Process.get().config.get(
+                'FLASK_CMS_BASE_ADMIN_LOGIN_TEMPLATE',
+                Server.Process.get().config.get('BASE_LOGIN_TEMPLATE', None)
+        )):
             Server.Process.get().register_blueprint(base.Login().create_blueprint(admin))
-        #if current_app.config.get('FLASK_CMS_LDAP_ADMIN_LOGIN_TEMPLATE', current_app.get('LDAP_LOGIN_TEMPLATE', None)):
-        #    Server.Process.get().register_blueprint(ldap.Login().create_blueprint(admin))
+            self._enabled_logins.append('admin:login:base')
+        if (Server.Process.get().config.get(
+                'FLASK_CMS_LDAP_ADMIN_LOGIN_TEMPLATE',
+                Server.Process.get().config.get('LDAP_LOGIN_TEMPLATE', None)
+        )):
+            Server.Process.get().register_blueprint(ldap.Login().create_blueprint(admin))
+            self._enabled_logins.append('admin:login:ldap')
+        if Server.Process.openid is not None:
+            Server.Process.get().register_blueprint(openid.Login().create_blueprint(admin))
+            self._enabled_logins.append('admin:login:openid')
+        for rule in Process.get().url_map.iter_rules():
+            logging.info((rule.rule, rule.endpoint))
+        if Server.Process.saml is not None:
+            Server.Process.get().register_blueprint(saml.Login().create_blueprint(admin))
+            self._enabled_logins.append('admin:login:saml2')
 
     @expose('/', methods=['GET'])
     def index(self):
         if getattr(current_user, 'is_admin', False):
             return redirect(url_for('admin:index'))
-        return self.render(current_app.config.get('FLASK_CMS_MULTI_LOGIN_TEMPLATE'), logins=Environment.Logins)
+        return self.render(current_app.config.get('FLASK_CMS_MULTI_LOGIN_TEMPLATE'), logins=self._enabled_logins)
 
     @classmethod
     def user(cls, id):
-        logging.info("{}: {}".format(__name__, id))
         if type(id) is int:
             if 'BASE' in Environment.Logins:
                 from models.persistent import cms
@@ -69,12 +84,6 @@ class Login(BaseView):
                 pass
             return user
         return None
-
-    def redirect_login(self):
-        if 'admin' in request.url:
-            return redirect(url_for('admin:login.index') + "?next={}".format(request.url))
-        else:
-            return redirect(url_for('login') + "?next={}".format(request.url))
 
     @login_required
     @expose('/logout/', methods=['GET', 'POST'])

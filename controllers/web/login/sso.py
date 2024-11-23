@@ -3,8 +3,8 @@
 
 __author__ = 'Frederick NEY'
 
-from flask_framework.Server import Process
 from flask import session
+from flask_framework.Server import Process
 
 
 class Controller(object):

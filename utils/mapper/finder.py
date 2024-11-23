@@ -13,7 +13,6 @@ def subkey(_dict, key):
 
 
 def extract_fields(_mapper):
-
     def decorated(func):
 
         def map(*args, **kwargs):

@@ -1,13 +1,12 @@
 # coding: utf-8
-import logging
 
+from flask import redirect, url_for, request, current_app
 from flask_admin import BaseView, expose
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_framework.Database import Database
+from flask_framework.Server import Process
 from flask_framework.Utils.Auth import admin_login_required as login_required
 from flask_framework.Utils.Auth.ldap import LDAP
-from flask_framework.Database import Database
-from flask import flash, redirect, url_for, request, current_app
-import os
+from flask_login import current_user
 
 
 class Login(BaseView):
@@ -19,6 +18,7 @@ class Login(BaseView):
         :type manager: flask_login.LoginManager
         """
         super(Login, self).__init__(endpoint='admin:login:ldap', url='/admin/ldap/')
+        Process.login_manager().blueprint_login_views.update({'admin:login:ldap': "admin:login.index"})
 
     @expose('/', methods=['GET'])
     def index(self):
@@ -40,16 +40,11 @@ class Login(BaseView):
 
     @staticmethod
     def user(id):
-        logging.info("{}: {}".format(__name__, id))
         from models.persistent import cms
         user = Database.session.query(cms.Users).filter(cms.Users.id == id).first()
         return user
 
-    @expose('/logout/', methods=['POST'])
+    @expose('/logout/', methods=['POST', 'GET'])
     @login_required
     def logout(cls):
         return LDAP.logout('admin:login.index')
-
-    @staticmethod
-    def redirect_login():
-        return redirect(url_for('admin:login:ldap.index') +"?next={}".format(request.url))

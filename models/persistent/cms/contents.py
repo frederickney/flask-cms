@@ -3,17 +3,14 @@
 
 __author__ = 'Frederick NEY'
 
-
-from sqlalchemy import Column, Integer, VARCHAR, ForeignKey, BOOLEAN, BIGINT, TEXT, DateTime
-from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
 from flask_framework.Database import Database
-from . import Metadata
+from sqlalchemy import Column, VARCHAR, ForeignKey, BOOLEAN, BIGINT, TEXT, DateTime
+from sqlalchemy.orm import relationship
 
 
 class Contents(Database.Model):
-
     __tablename__ = 'content'
 
     id = Column(BIGINT, primary_key=True, nullable=False, default=None, autoincrement=True)
@@ -30,4 +27,3 @@ class Contents(Database.Model):
 
     def __repr__(self):
         return self.title
-

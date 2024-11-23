@@ -3,9 +3,10 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_admin import BaseView, expose
+from flask_framework.Server import Process
 from flask_framework.Utils.Auth import admin_login_required as login_required
+
 from models import forms
 
 
@@ -13,6 +14,7 @@ class Pages(BaseView):
 
     def __init__(self):
         super(Pages, self).__init__(endpoint='admin:pages', url='/admin/pages/')
+        Process.login_manager().blueprint_login_views.update({'admin:pages': "admin:login.index"})
 
     @expose('/')
     @login_required
@@ -22,7 +24,6 @@ class Pages(BaseView):
     @expose('/add/', methods=['GET'])
     @login_required
     def add(self):
-
         return self.render('admin/upload/index.html', form=forms.upload.Content())
 
     @expose('/save/', methods=['POST'])

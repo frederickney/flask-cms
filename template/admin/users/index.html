@@ -1,39 +1,48 @@
-{% extends "layout/form.html" %}
-
-{%  block menu %}
-    <ul class="nav navbar-nav" >
-    {% for link in menu %}
-    <li {%  if request.endpoint == link['endpoint'] %} class="active" {% endif %}>
-        <a href="{{ url_for(link['endpoint']) }}">{{ link['name'] }}</a>
-    </li>
-    {% endfor %}
-    </ul>
-{% endblock %}
+{% extends "layout/admin.html" %}
 
 {% block title %}
         Users
 {% endblock %}
 
 {% block content %}
-    {% for user in users %}
+    <div class="container col-md-12 panel">
         <div class="card">
-            <div class="card-body">
-                <br/>
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-md-3 text text-left">
-                        {{ user.email }}
+                    <div class="col-md-6 text text-left">
+                        Username
                     </div>
-                    <div class="col-md-9 text-left">
-                        {{ user.is_admin }}
+                    <div class="col-md-3 text-left">
+                        Role admin
+                    </div>
+                    <div class="col-md-3 text-left">
+                        Active
                     </div>
                 </div>
-                <br/>
+            </div>
+        </div>
+    </div>
+    {% for user in users %}
+    <div class="container col-md-12 panel panel-default">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 text text-left">
+                        {{ user.email }}
+                    </div>
+                    <div class="col-md-3 text-left">
+                        {{ user.is_admin }}
+                    </div>
+                    <div class="col-md-3 text-left">
+                        {{ user.is_active }}
+                    </div>
+                </div>
             </div>
             <div class="card-footer">
                 <div class="row text-uppercase text">
                 </div>
-                <br/>
             </div>
         </div>
+    </div>
     {% endfor %}
 {% endblock %}

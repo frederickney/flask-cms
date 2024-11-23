@@ -1,5 +1,6 @@
-from .finder import extract_fields
 from flask_framework.Config import Environment
+
+from .finder import extract_fields
 
 _mapper = {
     'email': ('email', str),

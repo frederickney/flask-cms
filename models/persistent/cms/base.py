@@ -3,14 +3,10 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_framework.Database import Database
 
 
 class Base(Database.Model):
-
     hidden = {}
 
     primary = {}
-
-

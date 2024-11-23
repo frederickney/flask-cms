@@ -1,10 +1,13 @@
 {% extends "themes/default/index.html" %}
 
-{% block content %}
+{% block title %}
     <h3>
-        {{ title }}
+        {{ request.url }}
     </h3>
-    <p>
-        {{ cause }}
-    </p>
+{% endblock %}
+
+{% block content %}
+    <strong class="panel-body text-info">
+        {{ title }}
+    </strong>
 {% endblock %}

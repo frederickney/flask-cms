@@ -1,13 +1,5 @@
-{% extends "themes/default/index.html" %}
-
-{% block title %}
-    <h3>
-        {{ title }}
-    </h3>
-{% endblock %}
-
-{% block content %}
-    <p class="alert alert-danger">
-        {{ cause }}
-    </p>
-{% endblock %}
+{% if theme is defined %}
+    {% extends "themes/%s/50x.html" % theme %}
+{% else %}
+    {% extends "themes/%s/50x.html" % 'default' %}
+{% endif %}

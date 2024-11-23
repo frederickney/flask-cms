@@ -3,29 +3,28 @@
 
 __author__ = 'Frederick NEY'
 
-
 import logging
-from flask import url_for, request, redirect, flash
-from flask import render_template as template
-from flask_login import logout_user, LoginManager
-from flask_framework import Server
-from flask_framework.Database import Database
-from models.persistent import cms
-from flask_framework.Config import Environment
 from json import JSONDecodeError
 
-
+from flask import render_template as template
+from flask import url_for, request, redirect, flash
+from flask_framework import Server
+from flask_framework.Config import Environment
+from flask_framework.Database import Database
+from flask_login import logout_user, LoginManager
 
 try:
     from .ldap import Controller as ldap
 except AttributeError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 except ImportError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 
@@ -34,11 +33,13 @@ try:
 except AttributeError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 except ImportError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 
@@ -57,31 +58,33 @@ except ImportError as e:
     pass
 """
 
-
 try:
     from .openid import Controller as openid
 except AttributeError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 except ImportError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
-
 
 try:
     from .local import Controller as local
 except AttributeError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 except ImportError as e:
     logging.warning(e)
     import traceback
+
     traceback.print_tb(e.__traceback__)
     pass
 
@@ -90,16 +93,17 @@ class Manage():
 
     @classmethod
     def setup(cls):
-        Server.Process._manager = LoginManager()
-        Server.Process._manager.init_app(app=Server.Process.get())
-        Server.Process._manager.unauthorized_handler(cls.redirect_login)
-        Server.Process._manager.user_loader(cls.user_loader)
+        Server.Process.login_manager(LoginManager()).init_app(app=Server.Process.get()) \
+            if Server.Process.login_manager() is None else Server.Process.login_manager()
+        Server.Process.login_manager().blueprint_login_views.update({
+            None: 'login'
+        })
+        Server.Process.login_manager().user_loader(cls.user_loader)
         pass
 
     @classmethod
     def login(cls):
         return template('login/index.html', logins=Environment.Logins, theme='default')
-
 
     @classmethod
     def logout(cls):
@@ -117,7 +121,6 @@ class Manage():
 
     @staticmethod
     def user_loader(id):
-        logging.info("{}: {}".format(__name__, id))
         if type(id) is int:
             if 'BASE' in Environment.Logins:
                 from models.persistent import cms

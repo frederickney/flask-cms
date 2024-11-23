@@ -3,14 +3,10 @@
 
 __author__ = 'Frederick NEY'
 
-import logging
-
-from flask import jsonify, request, redirect, url_for
-from flask_framework.Utils.Auth.ldap import LDAP
-from flask_login import login_required
-from flask_login import LoginManager
+from flask import request, redirect, url_for
 from flask_framework import Server
-from models import forms
+from flask_framework.Utils.Auth.ldap import LDAP
+from flask_login import LoginManager
 
 
 class Controller(object):
@@ -23,17 +19,23 @@ class Controller(object):
         """
         from flask_framework import Server
         import controllers
-        Server.Process._manager = LoginManager()
-        Server.Process._manager.init_app(app=Server.Process.get())
-        Server.Process._manager.unauthorized_handler(cls.redirect_login)
-        Server.Process._manager.user_loader(cls.user_loader)
-        Server.Process.get().add_url_rule('/ldap/login/', 'ldap.login', controllers.web.login.ldap.index, methods=['GET'])
-        Server.Process.get().add_url_rule('/ldap/login/', 'ldap.login.send', controllers.web.login.ldap.login, methods=['POST'])
-        Server.Process.get().add_url_rule('/ldap/logout/', 'ldap.logout', controllers.web.login.ldap.logout, methods=['POST'])
+        Server.Process.login_manager(LoginManager()).init_app(app=Server.Process.get()) \
+            if Server.Process.login_manager() is None else Server.Process.login_manager()
+        Server.Process.login_manager().blueprint_login_views.update({
+            None: 'login'
+        })
+        Server.Process.login_manager().user_loader(cls.user_loader)
+        Server.Process.get().add_url_rule('/ldap/login/', 'ldap.login', controllers.web.login.ldap.index,
+                                          methods=['GET'])
+        Server.Process.get().add_url_rule('/ldap/login/', 'ldap.login.send', controllers.web.login.ldap.login,
+                                          methods=['POST'])
+        Server.Process.get().add_url_rule('/ldap/logout/', 'ldap.logout', controllers.web.login.ldap.logout,
+                                          methods=['POST'])
         try:
             Server.Process.get().add_url_rule('/logout/', 'logout', controllers.web.login.ldap.logout, methods=['POST'])
             Server.Process.get().add_url_rule('/login/', 'login', controllers.web.login.ldap.login, methods=['GET'])
-            Server.Process.get().add_url_rule('/login/', 'ldap.login.send', controllers.web.login.ldap.login, methods=['POST'])
+            Server.Process.get().add_url_rule('/login/', 'ldap.login.send', controllers.web.login.ldap.login,
+                                              methods=['POST'])
         except Exception as e:
             pass
 

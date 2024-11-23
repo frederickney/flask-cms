@@ -3,7 +3,6 @@
 
 __author__ = 'Frederick NEY'
 
-
 from flask_admin.menu import MenuLink
 
 

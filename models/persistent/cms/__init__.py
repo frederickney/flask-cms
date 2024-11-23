@@ -3,9 +3,8 @@
 
 __author__ = 'Frederick NEY'
 
-
-from .users import Users
-from .settings import Settings
-from .metadata import Metadata
 from .contents import Contents
+from .metadata import Metadata
 from .plugins import Plugins
+from .settings import Settings
+from .users import Users
