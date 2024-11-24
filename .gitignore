@@ -6,6 +6,11 @@ __pycache__/
 log/
 sessions/
 mysql/
+mysql-server
 config/
 redis.conf
-
+cms.p12
+controllers/socket
+extensions
+build
+docker-compose.yml
