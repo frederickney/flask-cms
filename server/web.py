@@ -18,4 +18,6 @@ class Route(object):
         :return: Route object
         """
         flask_cms.server.web.Route(server)
+        import controllers
+        server.add_url_rule('/test', "test", controllers.web.home.test, methods=["GET"])
         return
