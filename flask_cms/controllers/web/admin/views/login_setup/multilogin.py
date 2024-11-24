@@ -6,7 +6,8 @@ __author__ = 'Frederick NEY'
 import logging
 
 from flask import url_for, redirect, current_app
-from flask_admin import BaseView, expose
+from flask_admin import expose
+
 from flask_framework import Server
 from flask_framework.Config import Environment
 from flask_framework.Database import Database
@@ -16,6 +17,7 @@ from flask_login import current_user, logout_user
 from flask_login_oidc import get_client
 
 from flask_cms.models.persistent import cms
+from flask_cms.views import BaseView
 from . import base
 from . import ldap
 from . import openid

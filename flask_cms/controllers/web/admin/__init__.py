@@ -4,10 +4,12 @@
 __author__ = 'Frederick NEY'
 
 import logging
+import os.path
 
 import flask_framework.Server as Server
 from flask import Flask
 from flask_admin import Admin
+from flask_framework.Config import Environment
 from flask_framework.Database import Database
 from flask_framework.Server import deniedwebcall
 from flask_login import LoginManager
@@ -36,7 +38,6 @@ def setup():
 
 @deniedwebcall
 def load_views(adm, app, login_manager=None):
-    from flask_framework.Config import Environment
     """
 
     :param adm:
@@ -64,4 +65,13 @@ def load_views(adm, app, login_manager=None):
     app.register_blueprint(views.Login(adm).create_blueprint(adm))
     if 'redis' in Environment.Services:
         adm.add_views(
-            views.RedisCli(Redis(Environment.Services['redis']['HOST'], Environment.Services['redis']['PORT'])))
+            views.RedisCli(
+                Redis(Environment.Services['redis']['HOST'], Environment.Services['redis']['PORT']),
+                static_folder=os.path.join(
+                    os.path.dirname(__file__).removesuffix("/controllers/web/admin"), 'static'
+                ),
+                template_folder=os.path.join(
+                    os.path.dirname(__file__).removesuffix("/controllers/web/admin"), 'template'
+                )
+            )
+        )

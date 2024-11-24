@@ -8,6 +8,7 @@ from json import JSONDecodeError
 
 from flask import render_template as template
 from flask import url_for, request, redirect, flash
+from flask_cms.models.persistent import cms
 from flask_framework import Server
 from flask_framework.Config import Environment
 from flask_framework.Database import Database
@@ -103,7 +104,9 @@ class Manage():
 
     @classmethod
     def login(cls):
-        return template('login/index.html', logins=Environment.Logins, theme='default')
+        theme = Database.session.query(cms.Settings).filter(cms.Settings.setting_name == "site.theme").first()
+        theme = 'default' if theme is None else theme.setting_value
+        return template('login/index.html', logins=Environment.Logins, theme=theme)
 
     @classmethod
     def logout(cls):

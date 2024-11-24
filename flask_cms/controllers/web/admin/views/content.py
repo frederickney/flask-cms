@@ -3,11 +3,12 @@
 
 __author__ = 'Frederick NEY'
 
-from flask_admin import BaseView, expose
+from flask_admin import expose
 from flask_framework.Utils.Auth import admin_login_required as login_required
 
 from flask_cms.models import forms
 from flask_cms.models.persistent import cms
+from flask_cms.views import BaseView
 
 
 class Content(BaseView):

@@ -4,7 +4,7 @@ import logging
 
 from Crypto.Hash import SHA512
 from flask import url_for, redirect, request, flash, current_app
-from flask_admin import BaseView, expose
+from flask_admin import expose
 from flask_framework.Database import Database
 from flask_framework.Server import Process
 from flask_framework.Utils.Auth import admin_login_required as login_required
@@ -12,6 +12,7 @@ from flask_login import current_user, login_user, logout_user
 
 from flask_cms.models import forms
 from flask_cms.models.persistent import cms
+from flask_cms.views import BaseView
 
 
 class Login(BaseView):

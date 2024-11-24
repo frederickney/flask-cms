@@ -3,7 +3,9 @@
 
 __author__ = 'Frederick NEY'
 
-from flask_admin import BaseView, expose
+from flask_admin import expose
+
+from flask_cms.views import BaseView
 
 
 class Setup(BaseView):
