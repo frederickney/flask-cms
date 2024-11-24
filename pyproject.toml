@@ -33,8 +33,9 @@ dependencies = [
     'importlib-metadata; python_version>"3.7"'
 ]
 
-[options.package_data]
-module = ["flask_cms/template/**/*.html", "flask_cms/template/**/*.*"]
+[tool.setuptools.package-data]
+"flask_cms.template" = ["**", "*.html"]
+"flask_cms.static" = ["**", "*.*"]
 
 [tool.setuptools.packages.find]
 exclude = ["models*", "server*", "config*", "log*", "uploads*", "extensions*", "static*", "template*", "controllers*"]

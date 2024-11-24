@@ -14,3 +14,4 @@ controllers/socket
 extensions
 build
 docker-compose.yml
+flask_cms.egg-info
