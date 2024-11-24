@@ -19,7 +19,6 @@ class Route(object):
         :return: Route object
         """
         from flask_cms import controllers
-        server.add_url_rule('/test', "test", controllers.web.home.test, methods=["GET"])
         try:
             if Environment.Logins:
                 if len(Environment.Logins) > 1:

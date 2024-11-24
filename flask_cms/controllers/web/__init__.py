@@ -6,4 +6,3 @@ __author__ = 'Frederick NEY'
 from . import admin
 from . import errors
 from . import login
-from .home import Controller as home
