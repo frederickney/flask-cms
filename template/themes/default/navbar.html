@@ -1,0 +1,7 @@
+{% macro add(page) %}
+    {% if page %}
+        {% if page.parent %}
+            {{add(page.parent)}}> <a href="{{page.parent.url}}">{{page.parent.title}}</a>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

@@ -38,7 +38,7 @@ dependencies = [
 "flask_cms.static" = ["**", "*.*"]
 
 [tool.setuptools.packages.find]
-exclude = ["models*", "server*", "config*", "log*", "uploads*", "extensions*", "static*", "template*", "controllers*"]
+exclude = ["models*", "server*", "static*", "template*"]
 
 [project.urls]
 Homepage = "https://github.com/frederickney/flask-cms"

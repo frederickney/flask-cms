@@ -1,0 +1,44 @@
+{% macro post(page) %}
+    <div class="panel-body card-text">
+        {% if page.type == 'pages' %}
+        <div class="container text-left">
+            <a href="{{ page.url }}">
+                <h3>
+                    {{ page.title }}
+                </h3>
+            </a>
+        </div>
+        <div class="container text-left">
+            {{ page.content|safe }}
+        </div>
+        {% endif %}
+        {% if page.type == 'medias' %}
+            <div class="container text-left">
+                <img src="{{ url_for('static', filename=page.url) }}" alt="{{ page.title }}" rel="{{ page.title }}">
+            </div>
+        {% endif %}
+        <div class="container text-center">
+            <div class="row">
+                {% for post in page.childs %}
+                    {% if post.type == 'pages' %}
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <a href="{{ post.url }}">
+                                    <h4>
+                                        {{ post.title }}
+                                    </h4>
+                                </a>
+                            </div>
+                            <div class="text-left">{{ post.content|safe }}</div>
+                        </div>
+                    {% endif %}
+                    {% if  post.type == 'medias' %}
+                        <div class="col-md-4">
+                            <img src="{{ url_for('static', filename=post.url) }}" alt="{{ post.title }}" rel="{{ post.title }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
