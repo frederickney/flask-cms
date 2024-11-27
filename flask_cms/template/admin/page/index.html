@@ -1,0 +1,51 @@
+{% extends "layout/admin.html" %}
+
+{%  import 'admin/gui.html' as gui with context %}
+{% block head %}
+    {{ gui.media_nav("admin:pages.static") }}
+{%  endblock %}
+
+{% block title %}
+        Pages
+{% endblock %}
+
+{% block content %}
+    <div class="row col-md-12">
+        {% for page in pages %}
+        <div class="row admin-pages-nav">
+            <div class="col-md-4">
+                <h5>
+                    <a href="{{ page.url }}">
+                    {{ page.title }}
+                    </a>
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <h5>
+                    <a href="{{ page.url }}">
+                    {{ page.url }}
+                    </a>
+                </h5>
+            </div>
+            <div class="col-md-2">
+                <h5>
+                    {{ 'ready' if page.activated == False else 'published' }}
+                </h5>
+            </div>
+            <div class=" col-md-1 pages-nav">
+                <form action="{{ url_for('admin:pages.edit') }}" method="get">
+                    {{ forms[loop.index - 1].content }}
+                    <input type="submit" value="" alt="" class="actions" style="background-image: url('{{ url_for("admin:pages.static", filename="images/edit.png") }}')">
+                </form>
+            </div>
+            <div class="col-md-1 pages-nav">
+                <form action="{{ url_for('admin:pages.delete') }}" enctype="multipart/form-data" method="post">
+                    <input id='csrf_token' type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    {{ forms[loop.index - 1].content }}
+                    <input type="submit" value="" alt="" class="actions" style="background-image: url('{{ url_for("admin:pages.static", filename="images/82-512.png") }}')">
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

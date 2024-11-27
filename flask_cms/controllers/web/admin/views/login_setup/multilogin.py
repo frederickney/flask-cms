@@ -57,8 +57,8 @@ class Login(BaseView):
 
     @expose('/', methods=['GET'])
     def index(self):
-        if getattr(current_user, 'is_admin', False):
-            return redirect(url_for('admin:index'))
+        #if getattr(current_user, 'is_admin', False):
+        #    return redirect(url_for('login'))
         return self.render(current_app.config.get('FLASK_CMS_MULTI_LOGIN_TEMPLATE'), logins=self._enabled_logins)
 
     @classmethod

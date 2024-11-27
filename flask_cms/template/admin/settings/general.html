@@ -10,7 +10,7 @@
 
     <div class="col-md-12">
         <div class="row">
-            <form method="post" action="{{ url_for('admin:settings.setting') }}">
+            <form method="post" class="col-md-12" action="{{ url_for('admin:settings.setting') }}">
                 {{ form.hidden_tag() }}
                 <div class="card">
                     <br/>
@@ -60,38 +60,34 @@
     <div class="col-md-12 panel panel-default">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <form method="post" action="{{ url_for('admin:settings.update') }}">
-                    {{ setting['update'].hidden_tag() }}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-5 text-info text-right">
-                                    {{ setting['update'].Value.label }}
-                                    </div>
-                                    <div class="col-md-5">
-                                    {{ setting['update'].Value }}
-                                    </div>
-                                    <div class="col-md-2">
-                                    {{ setting['update'].submit }}
-                                    </div>
+            <form class="col-md-8 col-md-offset-2" method="post" action="{{ url_for('admin:settings.update') }}">
+                {{ setting['update'].hidden_tag() }}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-5 text-info text-right">
+                                {{ setting['update'].Value.label }}
+                                </div>
+                                <div class="col-md-5">
+                                {{ setting['update'].Value }}
+                                </div>
+                                <div class="col-md-2">
+                                {{ setting['update'].submit }}
                                 </div>
                             </div>
                         </div>
-                </form>
-            </div>
-            <div class="col-md-2 text-right">
-                <form method="post" action="{{url_for('admin:settings.delete')}}">
-                    {{ setting['delete'].hidden_tag() }}
-                    <div class="card">
+                    </div>
+            </form>
+            <form class="col-md-2 text-right" method="post" action="{{url_for('admin:settings.delete')}}">
+                {{ setting['delete'].hidden_tag() }}
+                <div class="card">
                     <div class="card-body">
                         <div class="row">
                             {{ setting['delete'].submit }}
                         </div>
                     </div>
                 </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
     </div>

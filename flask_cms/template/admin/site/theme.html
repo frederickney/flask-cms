@@ -1,24 +1,44 @@
 {% extends "layout/admin.html" %}
 
+{% block head %}
+    {{ super() }}
+    <link href="{{ url_for('admin:appearance.static', filename='admin/css/input.css', v='1.0.0') }}" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
 {{ title }}
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-12">
-        <form method="post" action="{{url_for('admin:appearance.site')}}">
-                {{ selector.hidden_tag() }}
-            <div class="card">
-                <div class="card-body">
-    {{ selector.theme.label }}
-    {{ selector.theme }}
-
-                </div>
-                <div class="card-footer">
-    {{ selector.submit }}
-
-                </div>
+    <br/>
+    <div class="col-md-12 panel panel-default">
+        <div class="col-md-12">
+            <div class="row">
+                <form method="post" class="col-md-12" action="{{url_for('admin:appearance.site')}}">
+                        {{ selector.hidden_tag() }}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 text-right">
+                                {{ selector.theme.label }}
+                                </div>
+                                <div class="col-md-6 text-left">
+                                {{ selector.theme }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-6 text-right">
+                                </div>
+                                <div class="col-md-6 text-left">
+                                {{ selector.submit }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock %}

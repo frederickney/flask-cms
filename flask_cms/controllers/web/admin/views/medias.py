@@ -43,7 +43,7 @@ class Medias(Content):
             form = forms.edit.Form()
             form.content.data = media.id
             _forms.append(form)
-        return self.render('admin/medias.html', medias=medias, forms=_forms, menu=self.submenu)
+        return self.render('admin/media/index.html', medias=medias, forms=_forms, menu=self.submenu)
 
     @login_required
     @expose('/add/', methods=['POST'])
@@ -66,14 +66,17 @@ class Medias(Content):
                     title=file.filename,
                     type=self.type,
                     activated=False,
-                    url='uploads/{}/{}/{}'.format(date.year, date.month, file.filename)
+                    url='/uploads/{}/{}/{}'.format(date.year, date.month, file.filename)
                 )
             )
             Database.session.commit()
             if url_for('admin:medias.add') not in request.referrer:
                 return jsonify(
-                    {'file': url_for('static',
-                                     filename='uploads/{}/{}/{}'.format(date.year, date.month, file.filename))}
+                    {
+                        'file': url_for(
+                            'static', filename='uploads/{}/{}/{}'.format(date.year, date.month, file.filename)
+                        )
+                    }
                 )
             else:
                 flash('Upload success')

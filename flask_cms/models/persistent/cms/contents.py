@@ -20,7 +20,12 @@ class Contents(Database.Model):
     activated = Column(BOOLEAN, nullable=False, default=False)
     type = Column(VARCHAR(32), nullable=False)
     parent_id = Column(BIGINT, ForeignKey('content.id'), nullable=True)
-    parent = relationship('Contents')
+    parent = relationship(
+        'Contents', primaryjoin="Contents.parent_id==Contents.id", foreign_keys="Contents.id", uselist=False
+    )
+    childs = relationship(
+        'Contents', primaryjoin="Contents.id==Contents.parent_id", foreign_keys="Contents.parent_id", uselist=True
+    )
     created_on = Column(DateTime, default=datetime.now)
     updated_on = Column(DateTime, default=datetime.now)
     metas = relationship("Metadata", uselist=True)

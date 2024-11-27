@@ -6,37 +6,21 @@
 {%  endblock %}
 
 {% block title %}
-    {{ content.title }}
+        Add page
 {% endblock %}
 
 {% block content %}
         <form class="col-md-12" action="{{ url_for('admin:pages.save') }}" method="post">
-            <br/>
-            <div class="row">
-                <div class="card col-md-12 text-center">
-                    <img src="{{url_for('static', filename=content.url)}}"
-                         href="{{url_for('static', filename=content.url)}}"
-                         rel="{{url_for('static', filename=content.title)}}"
-                         alt="{{url_for('static', filename=content.title)}}"
-                         style="width: 100%"
-                    />
-                </div>
-            </div>
-            <div class="row col-md-12">
-                <div class="col-md-12">
-                    <a href="{{ content.url }}" ><h5>{{ content.url }}</h5></a>
-                </div>
-            </div>
             {{ form.hidden_tag() }}
-            <div class="row" style="display: none">
+            <div class="row">
                 <div class="card col-md-3 text-right">
                     {{form.title.label}}
                 </div>
                 <div class="card col-md-6 text-left">
-                    {{form.title.data}}
+                    {{form.title}}
                 </div>
             </div>
-            <div class="row" style="display: none">
+            <div class="row">
                 <div class="card col-md-3 text-right">
                     {{form.url.label}}
                 </div>
@@ -48,11 +32,11 @@
                 <div class="card col-md-3 text-right">
                     {{form.parent.label}}
                 </div>
-                <div class="card col-md-6 text-left">
+                <div class="card col-md-6 text-default text-left">
                     {{form.parent}}
                 </div>
             </div>
-            <div class="row" style="display: none">
+            <div class="row">
                 <div class="card col-md-12 text-center">
                     {{form.content}}
                 </div>
@@ -83,3 +67,27 @@
             </div>
         </form>
 {% endblock %}
+
+{%  block tail %}
+    <script src="{{ url_for("admin:pages.static", filename='js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: 'textarea#content', // Replace this CSS selector to match the placeholder element for TinyMCE
+        setup: function (editor) {
+          editor.on('change', function () {
+              tinymce.triggerSave();
+          });
+        }
+        {% if plugins is defined  %}
+            {% if plugins is not none %}
+            ,plugins: '{{plugins.setting_value}}'
+            {%  endif %}
+        {% endif %}
+        {% if toolbar is defined %}
+            {% if toolbar is not none %}
+            ,toolbar: '{{toolbar.setting_value}}'
+            {% endif %}
+        {% endif %}
+      });
+</script>
+{%  endblock %}
