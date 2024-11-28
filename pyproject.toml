@@ -28,7 +28,6 @@ classifiers = [
 version="0.0.1"
 dependencies = [
     "tornado",
-    "gthread",
     "pymysql",
     "pycrypto",
     "python-ldap",
