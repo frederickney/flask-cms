@@ -27,9 +27,12 @@ class Route(object):
             if Environment.Logins:
                 if len(Environment.Logins) > 1:
                     logging.info("{}: Loading loging routes for multi login site".format(__name__))
-                    server.add_url_rule('/logout/', "logout", controllers.web.login.Manage.logout,
-                                        methods=["GET", "POST"])
-                    server.add_url_rule('/login/', "login", controllers.web.login.Manage.login, methods=["GET"])
+                    server.add_url_rule(
+                        '/logout/', "logout", controllers.web.login.Manage.logout, methods=["GET", "POST"]
+                    )
+                    server.add_url_rule(
+                        '/login/', "login", controllers.web.login.Manage.login, methods=["GET"]
+                    )
                 if 'BASE' in Environment.Logins:
                     controllers.web.login.local.setup()
                 if 'LDAP' in Environment.Logins:
@@ -38,6 +41,14 @@ class Route(object):
                     controllers.web.login.openid.setup()
                 if 'SAML2' in Environment.Logins:
                     controllers.web.login.saml.setup()
+            logins = Environment.Logins.copy()
+            for login in ['BASE', 'LDAP', 'SAML2', 'OpenID']:
+                try:
+                    logins.remove(login)
+                except ValueError:
+                    continue
+            if len(logins) > 0:
+                pass
             if len(Environment.Logins) > 1:
                 logging.info("{}: Loading loging manager for multi login site".format(__name__))
                 controllers.web.login.Manage.setup()

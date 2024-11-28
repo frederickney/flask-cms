@@ -95,7 +95,10 @@ class Manage():
     @classmethod
     def setup(cls):
         Server.Process.login_manager(LoginManager()).init_app(app=Server.Process.get()) \
-            if Server.Process.login_manager() is None else Server.Process.login_manager()
+            if Server.Process.login_manager() is None else \
+            Server.Process.login_manager().init_app(app=Server.Process.get()) \
+            if not hasattr(Server.Process.get(), 'login_manager') else \
+            Server.Process.login_manager()
         Server.Process.login_manager().blueprint_login_views.update({
             None: 'login'
         })

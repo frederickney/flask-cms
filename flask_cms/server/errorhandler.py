@@ -17,3 +17,4 @@ class Route(object):
         """
         from flask_cms import controllers
         server.register_error_handler(401, controllers.web.errors.unauthorized.handle)
+        server.register_error_handler(404, controllers.web.render.render_or_not_found)
