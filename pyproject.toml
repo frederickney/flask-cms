@@ -27,14 +27,9 @@ classifiers = [
 ]
 version="0.0.1"
 dependencies = [
-    "tornado",
     "pymysql",
     "pycrypto",
-    "python-ldap",
-    "activedirectory",
     "flask_admin",
-    "flask-login-saml",
-    "flask-login-oidc",
     "flask-framework-mvc",
     'importlib-metadata; python_version>"3.7"'
 ]
