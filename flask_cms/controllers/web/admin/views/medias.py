@@ -35,9 +35,11 @@ class Medias(Content):
     @login_required
     @expose('/')
     def index(self):
-        medias = Database.get_session_by_name('cms').query(cms.Contents) \
-            .filter(cms.Contents.type == self.type) \
-            .all()
+        medias = Database.get_session_by_name('cms').query(cms.Contents).filter(
+            cms.Contents.type == self.type
+        ).order_by(
+            cms.Contents.url
+        ).all()
         _forms = list()
         for media in medias:
             form = forms.edit.Form()

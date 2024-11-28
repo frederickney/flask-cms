@@ -32,7 +32,11 @@ class Pages(Content):
     @expose('/')
     @login_required
     def index(self):
-        pages = Database.session.query(cms.Contents).filter(cms.Contents.type == self.type).all()
+        pages = Database.session.query(cms.Contents).filter(
+            cms.Contents.type == self.type
+        ).order_by(
+            cms.Contents.url
+        ).all()
         _forms = list()
         for page in pages:
             form = forms.edit.Form()

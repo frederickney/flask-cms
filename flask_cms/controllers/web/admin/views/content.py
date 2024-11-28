@@ -44,7 +44,11 @@ class Content(BaseView):
             form.publish.data = content.activated
             form.type.data = self.type
             form.id.data = content.id
-            contents = Database.session.query(cms.Contents).all()
+            contents = Database.session.query(cms.Contents).order_by(
+                cms.Contents.url
+            ).order_by(
+                cms.Contents.type
+            ).all()
             pages = [(page.id, page.title) for page in contents]
             pages.insert(0, ('', '--- Select ---'))
             if content.parent_id:
