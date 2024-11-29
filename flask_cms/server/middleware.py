@@ -17,8 +17,8 @@ class Load(object):
         :type srv: flask.Flask
         """
         srv.before_request(Logger.before)
-        srv.before_request(ThemeLoader.before)
         srv.before_request(DatabaseLoader.before)
+        srv.before_request(ThemeLoader.before)
         srv.after_request(Logger.after)
         srv.after_request(ThemeLoader.after)
 
